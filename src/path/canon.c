@@ -254,8 +254,10 @@ int canonicalize(Tracee *tracee, const char *user_path, bool deref_final,
 		 * symlink points to a directory once it is
 		 * canonicalized, at the end of this loop.  */
 		status = substitute_binding_stat(tracee, finality, recursion_level, scratch_path, host_path);
-		if (status < 0)
-			return status;
+
+		/* In Android 5.x initiates errors "Function not implemented" or "Bad address" */
+		// if (status < 0)
+		//	return status;
 
 		/* Nothing special to do if it's not a link or if we
 		 * explicitly ask to not dereference 'user_path', as
