@@ -462,7 +462,7 @@ void translate_syscall_exit(Tracee *tracee)
 	poke_reg(tracee, SYSARG_RESULT, (word_t) status);
 
 end:
-	status = notify_extensions(tracee, SYSCALL_EXIT_END, 0, 0);
+	status = notify_extensions(tracee, SYSCALL_EXIT_END, status, 0);
 	if (status < 0)
 		poke_reg(tracee, SYSARG_RESULT, (word_t) status);
 }
