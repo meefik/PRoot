@@ -1,3 +1,21 @@
+Release v5.1.1
+==============
+
+New features
+------------
+
++ Added --fake-link (-l) option.
+
++ Added --kill-on-exit (-e) option.
+
++ Improved build tools.
+
+Fixes
+-----
+
++ In Android 5.x errors "Function not implemented" or "Bad address".
+
+
 Release v5.1.0
 ==============
 
