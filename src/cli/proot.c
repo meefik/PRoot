@@ -30,6 +30,7 @@
 #include "extension/extension.h"
 #include "path/binding.h"
 #include "attribute.h"
+#include "path/temp.h"
 
 /* These should be included last.  */
 #include "build.h"
@@ -199,7 +200,13 @@ static int handle_option_e(Tracee *tracee, const Cli *cli UNUSED, const char *va
 
 static int handle_option_l(Tracee *tracee, const Cli *cli UNUSED, const char *value UNUSED)
 {
-	(void) initialize_extension(tracee, fake_link_callback, value);
+	// Check permissions for make hard links
+	const char *oldpath = create_temp_file(tracee->ctx, "link");
+	const char *newpath = create_temp_name(tracee->ctx, "link");
+	int status = link(oldpath, newpath);
+	if (status < 0) {
+		(void) initialize_extension(tracee, fake_link_callback, value);
+	}
 	return 0;
 }
 

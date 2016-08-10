@@ -153,8 +153,9 @@ Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.",
 	  .handler = handle_option_e,
 	  .description = "Kill all processes on command exit.",
 	  .detail = "\tWhen the executed command leaves orphean or detached processes\n\
-\taround, proot waits until all processes possibly terminate. This option forces\n\
-\tthe immediate termination of all tracee processes when the main command exits.",
+\taround, proot waits until all processes possibly terminate.\n\
+\tThis option forces the immediate termination of all tracee\n\
+\tprocesses when the main command exits.",
 	},
 	{ .class = "Regular options",
 	  .arguments = {
@@ -164,7 +165,7 @@ Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.",
 	  .handler = handle_option_l,
 	  .description = "Fake hard links.",
 	  .detail = "\tWhen insufficient privileges to create hard links, proot will\n\
-\t be create copies of files instead of hard links.",
+\tbe create copies of files instead of hard links.",
 	},
 	{ .class = "Regular options",
 	  .arguments = {

@@ -12,7 +12,6 @@
 #include "path/path.h"
 #include "arch.h"
 #include "attribute.h"
-#include "path/temp.h"
 
 /**
  * Copy file with access permissions.
@@ -63,16 +62,6 @@ out_error:
 }
 
 /**
- * Check permissions for make hard links.
- */
-int check_hardlink_permissions(Tracee *tracee) {
-	const char *oldpath = create_temp_file(tracee->ctx, "regular");
-	const char *newpath = create_temp_name(tracee->ctx, "link");
-	int status = link(oldpath, newpath);
-	return status;
-}
-
-/**
  * Handler for this @extension.  It is triggered each time an @event
  * occurred.  See ExtensionEvent for the meaning of @data1 and @data2.
  */
@@ -86,15 +75,13 @@ int fake_link_callback(Extension *extension, ExtensionEvent event,
 
 	switch (event) {
 	case INITIALIZATION: {
-		if (check_hardlink_permissions(tracee) < 0) {
-			/* List of syscalls handled by this extensions.  */
-			static FilteredSysnum filtered_sysnums[] = {
+		/* List of syscalls handled by this extensions.  */
+		static FilteredSysnum filtered_sysnums[] = {
 				{ PR_link,		FILTER_SYSEXIT },
-				{ PR_linkat,		FILTER_SYSEXIT },
-				FILTERED_SYSNUM_END,
-			};
-			extension->filtered_sysnums = filtered_sysnums;
-		}
+			{ PR_linkat,		FILTER_SYSEXIT },
+			FILTERED_SYSNUM_END,
+		};
+		extension->filtered_sysnums = filtered_sysnums;
 		return 0;
 	}
 
