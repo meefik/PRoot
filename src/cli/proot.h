@@ -159,16 +159,6 @@ Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.",
 	},
 	{ .class = "Regular options",
 	  .arguments = {
-		{ .name = "-l", .separator = '\0', .value = NULL },
-		{ .name = "--fake-link", .separator = '\0', .value = NULL },
-		{ .name = NULL, .separator = '\0', .value = NULL } },
-	  .handler = handle_option_l,
-	  .description = "Fake hard links.",
-	  .detail = "\tWhen insufficient privileges to create hard links, proot will\n\
-\tbe create copies of files instead of hard links.",
-	},
-	{ .class = "Regular options",
-	  .arguments = {
 		{ .name = "-v", .separator = ' ', .value = "value" },
 		{ .name = "--verbose", .separator = '=', .value = "value" },
 		{ .name = NULL, .separator = '\0', .value = NULL } },
@@ -238,6 +228,16 @@ Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.",
 \tgid.  Likewise, files actually owned by the current user and\n\
 \tgroup appear as if they were owned by uid and gid instead.\n\
 \tNote that the -0 option is the same as -i 0:0.",
+	},
+	{ .class = "Extension options",
+	  .arguments = {
+		{ .name = "-l", .separator = '\0', .value = NULL },
+		{ .name = "--fake-link", .separator = '\0', .value = NULL },
+		{ .name = NULL, .separator = '\0', .value = NULL } },
+	  .handler = handle_option_l,
+	  .description = "Fake hard links.",
+	  .detail = "\tWhen insufficient privileges to create hard links, proot will\n\
+\tbe create copies of files instead of hard links.",
 	},
 	{ .class = "Alias options",
 	  .arguments = {
