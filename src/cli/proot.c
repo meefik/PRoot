@@ -206,6 +206,8 @@ static int handle_option_l(Tracee *tracee, const Cli *cli UNUSED, const char *va
 	int status = link(oldpath, newpath);
 	if (status < 0) {
 		(void) initialize_extension(tracee, fake_link_callback, value);
+	} else {
+		unlink(newpath);
 	}
 	return 0;
 }
