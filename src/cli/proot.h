@@ -6,7 +6,7 @@
 #include "cli/cli.h"
 
 #ifndef VERSION
-#define VERSION "5.1.0"
+#define VERSION "5.1.1"
 #endif
 
 static const char *recommended_bindings[] = {
@@ -60,6 +60,8 @@ static int handle_option_0(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_i(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_R(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_S(Tracee *tracee, const Cli *cli, const char *value);
+static int handle_option_e(Tracee *tracee, const Cli *cli, const char *value);
+static int handle_option_l(Tracee *tracee, const Cli *cli, const char *value);
 
 static int pre_initialize_bindings(Tracee *, const Cli *, size_t, char *const *, size_t);
 static int post_initialize_exe(Tracee *, const Cli *, size_t, char *const *, size_t);
@@ -145,6 +147,18 @@ Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.",
 	},
 	{ .class = "Regular options",
 	  .arguments = {
+		{ .name = "-e", .separator = '\0', .value = NULL },
+		{ .name = "--kill-on-exit", .separator = '\0', .value = NULL },
+		{ .name = NULL, .separator = '\0', .value = NULL } },
+	  .handler = handle_option_e,
+	  .description = "Kill all processes on command exit.",
+	  .detail = "\tWhen the executed command leaves orphean or detached processes\n\
+\taround, proot waits until all processes possibly terminate.\n\
+\tThis option forces the immediate termination of all tracee\n\
+\tprocesses when the main command exits.",
+	},
+	{ .class = "Regular options",
+	  .arguments = {
 		{ .name = "-v", .separator = ' ', .value = "value" },
 		{ .name = "--verbose", .separator = '=', .value = "value" },
 		{ .name = NULL, .separator = '\0', .value = NULL } },
@@ -214,6 +228,16 @@ Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.",
 \tgid.  Likewise, files actually owned by the current user and\n\
 \tgroup appear as if they were owned by uid and gid instead.\n\
 \tNote that the -0 option is the same as -i 0:0.",
+	},
+	{ .class = "Extension options",
+	  .arguments = {
+		{ .name = "-l", .separator = '\0', .value = NULL },
+		{ .name = "--fake-link", .separator = '\0', .value = NULL },
+		{ .name = NULL, .separator = '\0', .value = NULL } },
+	  .handler = handle_option_l,
+	  .description = "Fake hard links.",
+	  .detail = "\tWhen insufficient privileges to create hard links, proot will\n\
+\tbe create copies of files instead of hard links.",
 	},
 	{ .class = "Alias options",
 	  .arguments = {

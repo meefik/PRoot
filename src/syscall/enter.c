@@ -170,9 +170,10 @@ int translate_syscall_enter(Tracee *tracee)
 		if (status < 0)
 			break;
 
+		/* Check this path is exist. */
 		status = lstat(path, &statl);
 		if (status < 0)
-			break;
+			return -ENOENT;
 
 		/* Check this directory is accessible.  */
 		if ((statl.st_mode & S_IXUSR) == 0)
