@@ -43,12 +43,18 @@ typedef enum {
 	/* A canonicalized host path is being accessed during the
 	 * translation of a guest path: "(char *) data1" is the
 	 * canonicalized host path and "(bool) data2" is true if it is
-	 * the final path.  Note that several host paths are accessed
+	 * the last iteration.  Note that several host paths are accessed
 	 * for a given guest path since PRoot has to walk along all
 	 * parent directories and symlinks in order to translate it.
 	 * If the extension returns < 0, then PRoot reports this errno
 	 * as-is.  */
 	HOST_PATH,
+
+	/* The canonicalization succeed: "(char *) data1" is the
+	 * translated path from the host point-of-view.  It can be
+	 * substituted by the extension.  If the extension returns <
+	 * 0, then PRoot reports this errno as-is.  */
+	TRANSLATED_PATH,
 
 	/* The tracee enters a syscall, and PRoot hasn't do anything
 	 * yet.  If the extension returns > 0, then PRoot skips its
@@ -179,5 +185,6 @@ static inline int notify_extensions(Tracee *tracee, ExtensionEvent event,
 extern int kompat_callback(Extension *extension, ExtensionEvent event, intptr_t d1, intptr_t d2);
 extern int fake_id0_callback(Extension *extension, ExtensionEvent event, intptr_t d1, intptr_t d2);
 extern int care_callback(Extension *extension, ExtensionEvent event, intptr_t d1, intptr_t d2);
+extern int link2symlink_callback(Extension *extension, ExtensionEvent event, intptr_t d1, intptr_t d2);
 
 #endif /* EXTENSION_H */
