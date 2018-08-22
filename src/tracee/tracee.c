@@ -345,15 +345,15 @@ Tracee *get_tracee(const Tracee *current_tracee, pid_t pid, bool create)
  */
 void terminate_tracee(Tracee *tracee)
 {
-	tracee->terminated = true;
+        tracee->terminated = true;
 
-	/* Case where the terminated tracee is marked
-	   to kill all tracees on exit.
-	 */
-	if (tracee->kill_on_exit) {
-		VERBOSE(tracee, 1, "terminating all tracees on exit");
-		kill_all_tracees();
-	}
+        /* Case where the terminated tracee is marked
+           to kill all tracees on exit.
+        */
+        if (tracee->kill_on_exit) {
+                VERBOSE(tracee, 1, "terminating all tracees on exit");
+                kill_all_tracees();
+        }
 }
 
 /**

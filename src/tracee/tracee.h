@@ -91,7 +91,7 @@ typedef struct tracee {
 	/* Is this tracee ready to be freed?  TODO: move to a list
 	 * dedicated to terminated tracees instead.  */
 	bool terminated;
-	
+
 	/* Whether termination of this tracee implies an immediate kill
 	 * of all tracees. */
 	bool kill_on_exit;

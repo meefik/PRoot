@@ -58,10 +58,12 @@ static int handle_option_h(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_k(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_0(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_i(Tracee *tracee, const Cli *cli, const char *value);
+static int handle_option_p(Tracee *tracee, const Cli *cli, const char *value);
+static int handle_option_n(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_R(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_S(Tracee *tracee, const Cli *cli, const char *value);
-static int handle_option_e(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_l(Tracee *tracee, const Cli *cli, const char *value);
+static int handle_option_e(Tracee *tracee, const Cli *cli, const char *value);
 
 static int pre_initialize_bindings(Tracee *, const Cli *, size_t, char *const *, size_t);
 static int post_initialize_exe(Tracee *, const Cli *, size_t, char *const *, size_t);
@@ -153,9 +155,8 @@ Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.",
 	  .handler = handle_option_e,
 	  .description = "Kill all processes on command exit.",
 	  .detail = "\tWhen the executed command leaves orphean or detached processes\n\
-\taround, proot waits until all processes possibly terminate.\n\
-\tThis option forces the immediate termination of all tracee\n\
-\tprocesses when the main command exits.",
+\taround, proot waits until all processes possibly terminate. This option forces\n\
+\tthe immediate termination of all tracee processes when the main command exits.",
 	},
 	{ .class = "Regular options",
 	  .arguments = {
@@ -231,6 +232,38 @@ Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.",
 	},
 	{ .class = "Extension options",
 	  .arguments = {
+		{ .name = "-p", .separator = ' ', .value = "string" },
+		{ .name = "--port", .separator = '=', .value = "string" },
+		{ .name = NULL, .separator = '\0', .value = NULL } },
+	  .handler = handle_option_p,
+	  .description = "Map ports to others with the syntax as *string* \"port_in:port_out\".",
+	  .detail = "\tThis option makes PRoot intercept bind and connect system calls,\n\
+\tand change the port they use. The port map is specified\n\
+\twith the syntax: -b *port_in*:*port_out*. For example,\n\
+\tan application that runs a MySQL server binding to 5432 wants\n\
+\tto cohabit with other similar application, but doesn't have an\n\
+\toption to change its port. PRoot can be used here to modify\n\
+\tthis port: proot -p 5432:5433 myapplication. With this command,\n\
+\tthe MySQL server will be bound to the port 5433.\n\
+\tThis command can be repeated multiple times to map multiple ports.",
+	},
+	{ .class = "Extension options",
+	  .arguments = {
+		{ .name = "-n", .separator = '\0', .value = NULL },
+		{ .name = "--netcoop", .separator = '\0', .value = NULL },
+		{ .name = NULL, .separator = '\0', .value = NULL } },
+	  .handler = handle_option_n,
+	  .description = "Enable the network cooperation mode.",
+	  .detail = "\tThis option makes PRoot intercept bind() system calls and\n\
+\tchange the port they are binding to to 0. With this, the system will\n\
+\tallocate an available port. Each time this is done, a new entry is added\n\
+\tto the port mapping entries, so that corresponding connect() system calls\n\
+\tuse the same resulting port. This network \"cooperation\" makes it possible\n\
+\tto run multiple instances of a same program without worrying about the same ports\n\
+\tbeing used twice.",
+	},
+	{ .class = "Extension options",
+	  .arguments = {
 		{ .name = "-l", .separator = '\0', .value = NULL },
 		{ .name = "--fake-link", .separator = '\0', .value = NULL },
 		{ .name = NULL, .separator = '\0', .value = NULL } },
@@ -279,7 +312,7 @@ Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.",
 	  .handler = handle_option_S,
 	  .description = "Alias: -0 -r *path* + a couple of recommended -b.",
 	  .detail = "\tThis option is useful to safely create and install packages into\n\
-\tthe guest rootfs.  It is similar to the -R option expect it\n\
+\tthe guest rootfs.  It is similar to the -R option except it\n\
 \tenables the -0 option and binds only the following minimal set\n\
 \tof paths to avoid unexpected changes on host files:\n\
 \t\n\

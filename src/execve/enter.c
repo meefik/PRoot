@@ -493,7 +493,7 @@ static char *extract_loader(const Tracee *tracee, bool wants_32bit_version)
 	}
 	else {
 		start = (void *) &_binary_loader_exe_start;
-		size  = (size_t)(&_binary_loader_exe_end-&_binary_loader_exe_start);
+		size  = (size_t) (&_binary_loader_exe_end-&_binary_loader_exe_start);
 	}
 
 	status2 = write(fd, start, size);

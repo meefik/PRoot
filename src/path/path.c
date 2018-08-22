@@ -372,7 +372,7 @@ int translate_path(Tracee *tracee, char result[PATH_MAX], int dir_fd,
 	/* Canonicalize regarding the new root. */
 	status = canonicalize(tracee, guest_path, deref_final, result, 0);
 	if (status < 0)
-	    return status;
+		return status;
 
 	/* Final binding substitution to convert "result" into a host
 	 * path, since canonicalize() works from the guest

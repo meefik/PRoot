@@ -19,5 +19,5 @@ ${PROOT} --kill-on-exit true
 # I.e. in the file we must have "success" first, not "fail"
 ${PROOT} --kill-on-exit sh -c "setsid sh -c \"sleep 2; echo fail >>$tmpfile\" &"
 echo "success" >>$tmpfile
-read status <$tmpfile
-[ "$status" = success ] || exit 1
+read status_ <$tmpfile
+[ "$status_" = success ] || exit 1
