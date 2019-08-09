@@ -5,8 +5,8 @@ BUILD_ENV_DIR="slackware-$ARCH"
 
 case "$ARCH" in
 arm)
-    BASE_URL="http://slackware.uk/slackwarearm/slackwarearm-14.1/slackware"
-    SOURCE_DIR="slackware.uk"
+    BASE_URL="http://ftp.arm.slackware.com/slackwarearm/slackwarearm-14.1/slackware"
+    SOURCE_DIR="ftp.arm.slackware.com"
     QEMU="qemu-arm"
 ;;
 x86)
@@ -21,21 +21,21 @@ x86)
 esac
 
 which qemu-arm > /dev/null || {
-	echo "You need to install qemu-arm to run this script. On debian, run:"
-	echo "sudo apt-get install qemu-user"
-	exit 1
+    echo "You need to install qemu-arm to run this script. On debian, run:"
+    echo "sudo apt-get install qemu-user"
+    exit 1
 }
 
 which wget > /dev/null || {
-	echo "You need to install wget to run this script. On debian, run:"
-	echo "sudo apt-get install wget"
-	exit 1
+    echo "You need to install wget to run this script. On debian, run:"
+    echo "sudo apt-get install wget"
+    exit 1
 }
 
 PATH=`pwd`:$PATH
 which proot > /dev/null || {
-	echo "Please compile proot first, and copy it to the current directory"
-	exit 1
+    echo "Please compile proot first, and copy it to the current directory"
+    exit 1
 }
 
 echo "Slackware packages: "
@@ -46,7 +46,7 @@ echo "$PKGS"
 echo "STAGE 1. Downloading packages... "
 for DIR in a ap d e l n tcl
 do
-	wget -q -r -np -N --accept="$PKGS" $BASE_URL/$DIR/ || exit 1
+    wget -q -r -np -N --accept="$PKGS" $BASE_URL/$DIR/ || exit 1
 done
 
 rm -rf $BUILD_ENV_DIR
@@ -55,7 +55,7 @@ mkdir $BUILD_ENV_DIR || exit 1
 # Extract only a minimal subset (ignore errors):
 echo "STAGE 2. Unpacking packages... "
 for DIR in a l; do
-	find $SOURCE_DIR -type f -name '*.t?z' | xargs -n 1 tar -C $BUILD_ENV_DIR -x --exclude="dev/*" --exclude="lib/udev/devices/*" -f || exit 1
+    find $SOURCE_DIR -type f -name '*.t?z' | xargs -n 1 tar -C $BUILD_ENV_DIR -x --exclude="dev/*" --exclude="lib/udev/devices/*" -f || exit 1
 done
 
 # Do a minimal post-installation setup:
@@ -68,4 +68,3 @@ proot -q $QEMU -S $BUILD_ENV_DIR /sbin/ldconfig || exit 1
 
 # Install all package correcty (ignore warnings):
 find $SOURCE_DIR -type f -name '*.t?z' | xargs -n 1 proot -q $QEMU -S $BUILD_ENV_DIR -b $SOURCE_DIR /sbin/installpkg || exit 1
-

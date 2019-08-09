@@ -48,4 +48,3 @@ make -C $SRC clean
 proot -R $BUILD_ENV_DIR -q $QEMU env CPPFLAGS="-I`pwd`/talloc-$ARCH" LDFLAGS="-L`pwd`/talloc-$ARCH -static" make -C $SRC glibc-version=glibc-2.18 -f GNUmakefile -j4 || exit 1
 proot -R $BUILD_ENV_DIR -q $QEMU strip -s $SRC/proot
 mv $SRC/proot $SRC/proot-$ARCH
-
