@@ -60,6 +60,10 @@ static int handle_option_0(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_i(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_p(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_n(Tracee *tracee, const Cli *cli, const char *value);
+#ifdef HAVE_PYTHON_EXTENSION
+static int handle_option_P(Tracee *tracee, const Cli *cli, const char *value);
+#endif
+static int handle_option_c(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_R(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_S(Tracee *tracee, const Cli *cli, const char *value);
 static int handle_option_l(Tracee *tracee, const Cli *cli, const char *value);
@@ -73,7 +77,7 @@ static Cli proot_cli = {
 	.name     = "proot",
 	.subtitle = "chroot, mount --bind, and binfmt_misc without privilege/setup",
 	.synopsis = "proot [option] ... [command]",
-	.colophon = "Visit http://proot.me for help, bug reports, suggestions, patchs, ...\n\
+	.colophon = "Visit https://proot-me.github.io for help, bug reports, suggestions, patchs, ...\n\
 Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.",
 	.logo = "\
  _____ _____              ___\n\
@@ -264,13 +268,34 @@ Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.",
 	},
 	{ .class = "Extension options",
 	  .arguments = {
-		{ .name = "-l", .separator = '\0', .value = NULL },
-		{ .name = "--fake-link", .separator = '\0', .value = NULL },
+		{ .name = "-c", .separator = '\0', .value = NULL },
+		{ .name = "--link2copy", .separator = '\0', .value = NULL },
 		{ .name = NULL, .separator = '\0', .value = NULL } },
-	  .handler = handle_option_l,
-	  .description = "Fake hard links.",
+	  .handler = handle_option_c,
+	  .description = "Enable the link2copy extension.",
 	  .detail = "\tWhen insufficient privileges to create hard links, proot will\n\
 \tbe create copies of files instead of hard links.",
+        },
+#ifdef HAVE_PYTHON_EXTENSION
+	{ .class = "Extension options",
+	  .arguments = {
+		{ .name = "-P", .separator = ' ', .value = "string" },
+		{ .name = NULL, .separator = '\0', .value = NULL } },
+	  .handler = handle_option_p,
+	  .description = "Allow to access tracee information from python (experimental).",
+	  .detail = "\tThis option allow to launch a python script as an extension (experimental).",
+	},
+#endif
+	{ .class = "Extension options",
+	  .arguments = {
+		{ .name = "-l", .separator = '\0', .value = NULL },
+		{ .name = "--link2symlink", .separator = '\0', .value = NULL },
+		{ .name = NULL, .separator = '\0', .value = NULL } },
+	  .handler = handle_option_l,
+	  .description = "Enable the link2symlink extension.",
+	  .detail = "\tThis extension causes proot to create a symlink when a hardlink\n\
+\tshould be created. Some environments don't let the user create a hardlink, this\n\
+\toption should be used to fix it.",
 	},
 	{ .class = "Alias options",
 	  .arguments = {

@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH PROOT 1 "2014-12-12" "5.1.0" ""
+.TH PROOT 1 "2016-08-09" "5.1.0" ""
 .SH NAME
 PRoot \- chroot, mount --bind, and binfmt_misc without privilege/setup
 .
@@ -186,6 +186,16 @@ to cohabit with other similar application, but doesn\(aqt have an
 option to change its port. PRoot can be used here to modify
 this port: \fBproot \-p 5432:5433 myapplication\fP\&. With this command,
 the MySQL server will be bound to the port 5433.
+This command can be repeated multiple times to map multiple ports.
+.TP
+.B \-n\fP,\fB  \-\-netcoop
+Activates the network cooperation mode.
+.sp
+This option makes PRoot intercept bind() system calls and
+change the port they are binding to to 0. With this, the system will
+allocate an available port. Each time this is done, a new entry is added
+to the port mapping entries, so that corresponding connect() system calls
+use the same resulting port.
 .UNINDENT
 .SS Alias options
 .sp
@@ -661,25 +671,19 @@ checking whether the C compiler is a cross\-compiler... no
 .SH DOWNLOADS
 .SS PRoot
 .sp
-The latest release of PRoot is packaged on \fI\%http://packages.proot.me\fP
-and sources are hosted on \fI\%http://scm.proot.me\fP\&.  It is also available
-as highly compatible static binaries:
+The latest release of PRoot is packaged on \fI\%https://github.com/proot\-me/proot\-static\-build/releases\fP
+and sources are hosted on \fI\%https://github.com/proot\-me/proot\fP\&.  It is also
+available as highly compatible static binaries:
 .INDENT 0.0
 .IP \(bu 2
-for x86_64: \fI\%http://portable.proot.me/proot\-x86_64\fP
+for x86_64: \fI\%https://github.com/proot\-me/proot\-static\-build/blob/master/static/proot\-x86_64?raw=true\fP
 .IP \(bu 2
-for x86: \fI\%http://portable.proot.me/proot\-x86\fP
+for x86: \fI\%https://github.com/proot\-me/proot\-static\-build/blob/master/static/proot\-x86?raw=true\fP
 .IP \(bu 2
-for ARM: \fI\%http://portable.proot.me/proot\-arm\fP
+for ARM: \fI\%https://github.com/proot\-me/proot\-static\-build/blob/master/static/proot\-arm?raw=true\fP
 .IP \(bu 2
 other architectures: on demand.
 .UNINDENT
-.sp
-Such binaries are created using the following build\-system:
-\fI\%http://build.proot.me\fP\&.  It makes sure that they can run on any distros
-powered by the Linux kernel version 2.6.0 or later, nothing more.
-Ultimately these binaries can even run on Linux systems where no
-libraries are installed.
 .SS Rootfs
 .sp
 Here follows a couple of URLs where some rootfs archives can be freely
@@ -688,15 +692,17 @@ extracting these archives can be safely ignored since special files
 are typically bound (see \fB\-R\fP option for details).
 .INDENT 0.0
 .IP \(bu 2
-\fI\%http://download.openvz.org/template/precreated/\fP
+\fI\%http://download.openvz.org/template/precreated\fP
 .IP \(bu 2
-\fI\%https://images.linuxcontainers.org/images/\fP
+\fI\%https://images.linuxcontainers.org/images\fP
 .IP \(bu 2
-\fI\%http://distfiles.gentoo.org/releases/\fP
+\fI\%http://distfiles.gentoo.org/releases\fP
 .IP \(bu 2
-\fI\%http://cdimage.ubuntu.com/ubuntu\-core/releases/\fP
+\fI\%http://cdimage.ubuntu.com/ubuntu\-core\fP
 .IP \(bu 2
 \fI\%http://archlinuxarm.org/developers/downloads\fP
+.IP \(bu 2
+\fI\%https://alpinelinux.org/downloads\fP
 .UNINDENT
 .sp
 Technically such rootfs archive can be created by running the
@@ -730,11 +736,8 @@ use Debian Linux on Android without root access.
 \fI\%Polysquare Travis Container\fP:
 use several Linux distros on Travis\-CI without root access.
 .IP \(bu 2
-\fI\%JuJu\fP:
+\fI\%JuNest\fP:
 use Arch Linux on any Linux distros without root access.
-.IP \(bu 2
-\fI\%Brickstrap\fP:
-create ev3dev file system images.
 .IP \(bu 2
 \fI\%Portable PyPy\fP:
 portable 32 and 64 bit x86 PyPy binaries.
@@ -758,9 +761,9 @@ batch long\-term computations with Python.
 Binaries from the \fI\%Downloads\fP section are likely more up\-to\-date.
 .INDENT 0.0
 .IP \(bu 2
-\fI\%Arch Linux (PRoot)\fP
+\fI\%Alpine Linux\fP
 .IP \(bu 2
-\fI\%Arch Linux (CARE)\fP
+\fI\%Arch Linux\fP
 .IP \(bu 2
 \fI\%Gentoo\fP
 .IP \(bu 2
@@ -769,8 +772,6 @@ Binaries from the \fI\%Downloads\fP section are likely more up\-to\-date.
 \fI\%Ubuntu\fP
 .IP \(bu 2
 \fI\%NixOS\fP
-.IP \(bu 2
-\fI\%KaOS\fP
 .IP \(bu 2
 \fI\%University of Chicago RCC\fP
 .UNINDENT
@@ -793,7 +794,7 @@ Reproducible Execution\fP"
 (\fI\%essay\fP)
 during TRUST 2014
 .IP \(bu 2
-presentation "\fI\%An Introduction to the CARE tool\fP"
+presentation "\fI\%An Introduction to the CARE tool (dead link)\fP"
 during HiPEAC CSW 2013
 .IP \(bu 2
 presentation and essay "\fI\%PRoot: a Step Forward for QEMU User\-Mode\fP" (\fI\%proceedings\fP) during
@@ -804,7 +805,7 @@ tutorial "\fI\%How to install nix in home (on another distribution)\fP"
 .SS Companies using PRoot or CARE internally
 .INDENT 0.0
 .IP \(bu 2
-STMicroelectronics (main sponsor)
+STMicroelectronics
 .IP \(bu 2
 Sony
 .IP \(bu 2
@@ -820,7 +821,7 @@ chroot(1), mount(8), binfmt_misc, ptrace(2), qemu(1), sb2(1),
 bindfs(1), fakeroot(1), fakechroot(1)
 .SH COLOPHON
 .sp
-Visit \fI\%http://proot.me\fP for help, bug reports, suggestions, patches, ...
+Visit \fI\%https://proot\-me.github.io\fP for help, bug reports, suggestions, patches, ...
 Copyright (C) 2015 STMicroelectronics, licensed under GPL v2 or later.
 .INDENT 0.0
 .INDENT 3.5

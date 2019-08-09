@@ -198,14 +198,14 @@ static int handle_option_e(Tracee *tracee, const Cli *cli UNUSED, const char *va
 	return 0;
 }
 
-static int handle_option_l(Tracee *tracee, const Cli *cli UNUSED, const char *value UNUSED)
+static int handle_option_c(Tracee *tracee, const Cli *cli UNUSED, const char *value UNUSED)
 {
 	// Check permissions for make hard links
 	const char *oldpath = create_temp_file(tracee->ctx, "link");
 	const char *newpath = create_temp_name(tracee->ctx, "link");
 	int status = link(oldpath, newpath);
 	if (status < 0) {
-		(void) initialize_extension(tracee, fake_link_callback, value);
+		(void) initialize_extension(tracee, link2copy_callback, value);
 	} else {
 		unlink(newpath);
 	}
@@ -295,7 +295,6 @@ static int handle_option_S(Tracee *tracee, const Cli *cli, const char *value)
 	return 0;
 }
 
-
 static int handle_option_p(Tracee *tracee, const Cli *cli UNUSED, const char *value)
 {
 	int status = 0;
@@ -324,7 +323,7 @@ static int handle_option_p(Tracee *tracee, const Cli *cli UNUSED, const char *va
 	return status;
 }
 
-static int handle_option_n(Tracee *tracee, const Cli *cli UNUSED, const char *value UNUSED)
+static int handle_option_n(Tracee *tracee, const Cli *cli UNUSED, const char *value)
 {
 	int status = 0;
 
@@ -336,6 +335,19 @@ static int handle_option_n(Tracee *tracee, const Cli *cli UNUSED, const char *va
 	status = activate_netcoop_mode();
 
 	return status;
+}
+
+#ifdef HAVE_PYTHON_EXTENSION
+static int handle_option_P(Tracee *tracee, const Cli *cli UNUSED, const char *value)
+{
+	(void) initialize_extension(tracee, python_callback, value);
+	return 0;
+}
+#endif
+
+static int handle_option_l(Tracee *tracee, const Cli *cli UNUSED, const char *value UNUSED)
+{
+	return initialize_extension(tracee, link2symlink_callback, NULL);
 }
 
 /**

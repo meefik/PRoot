@@ -65,7 +65,7 @@ out_error:
  * Handler for this @extension.  It is triggered each time an @event
  * occurred.  See ExtensionEvent for the meaning of @data1 and @data2.
  */
-int fake_link_callback(Extension *extension, ExtensionEvent event,
+int link2copy_callback(Extension *extension, ExtensionEvent event,
 			intptr_t data1 UNUSED, intptr_t data2 UNUSED)
 {
 	Tracee *tracee = TRACEE(extension);
@@ -116,7 +116,7 @@ int fake_link_callback(Extension *extension, ExtensionEvent event,
 			status = copy_file(oldpath, newpath);
 			if (status < 0)
 				return status;
-				
+
 			set_sysnum(tracee, PR_void);
 			break;
 		}

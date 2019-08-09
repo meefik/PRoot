@@ -15,7 +15,7 @@ Checks
     - `CFLAGS=-fsanitize=address LDFLAGS=-lasan`
     - `make -C tests V=1 2>&1 | grep talloc`
 
-+ Fonctional checks: no regressions must appear with respect to
++ Functional checks: no regressions must appear with respect to
   tests/validation.mk and to the configurations tested in the previous
   release (`git show tags/...`).
 
@@ -26,8 +26,8 @@ Checks
 
   where "/usr/bin/true" is a symlink to "/bin/true".
 
-+ Static analysis: Coverity Scan and Clang Scan Build must not report
-  new issues.
++ Static analysis: Gcov/Lcov and Clang Scan Build must not report
+  new issues. All shell scripts must pass shellcheck.
 
 
 Documentation Update
@@ -43,3 +43,6 @@ Documentation Update
    src/cli/; $EDITOR src/cli/{proot,care}.h`
 
 4. upload the generated RPM .spec file to OBS
+
+5. regenerate the website: `SITE_DIR=../../proot-me.github.io
+   make -eC doc dist # relative to doc directory`

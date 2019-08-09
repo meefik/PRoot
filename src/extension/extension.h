@@ -75,6 +75,12 @@ typedef enum {
 	 * errno to the tracee.  */
 	SYSCALL_EXIT_END,
 
+	/* The canonicalization succeeds: "(char *) data1" is the
+	 * translated path from the host point-of-view. It can be
+	 * substituted by the extension. If the extension returns <
+	 * 0, then PRoot reports this errno as-is.  */
+	TRANSLATED_PATH,
+
 	/* The tracee is stopped either because of a syscall or a
 	 * signal: "(int) data1" is its new status as reported by
 	 * waitpid(2).  If the extension returns != 0, then PRoot
@@ -125,6 +131,10 @@ typedef enum {
 	/* Print the usage of the extension: "(bool) data1" is true
 	 * for a detailed usage.  See print_usage() as an example.  */
 	PRINT_USAGE,
+
+    /* Called for every already opened file descriptor:
+     * "(const char *)" data1" is the path, "(int) data2" is the file descriptor" */
+    ALREADY_OPENED_FD,
 } ExtensionEvent;
 
 #define CLONE_RECONF ((word_t) -1)
@@ -180,7 +190,9 @@ static inline int notify_extensions(Tracee *tracee, ExtensionEvent event,
 extern int kompat_callback(Extension *extension, ExtensionEvent event, intptr_t d1, intptr_t d2);
 extern int fake_id0_callback(Extension *extension, ExtensionEvent event, intptr_t d1, intptr_t d2);
 extern int care_callback(Extension *extension, ExtensionEvent event, intptr_t d1, intptr_t d2);
-extern int fake_link_callback(Extension *extension, ExtensionEvent event, intptr_t d1, intptr_t d2);
+extern int link2copy_callback(Extension *extension, ExtensionEvent event, intptr_t d1, intptr_t d2);
+extern int python_callback(Extension *extension, ExtensionEvent event, intptr_t d1, intptr_t d2);
+extern int link2symlink_callback(Extension *extension, ExtensionEvent event, intptr_t d1, intptr_t d2);
 
 /* Added extensions.  */
 /**

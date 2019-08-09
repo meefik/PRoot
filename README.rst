@@ -1,19 +1,33 @@
-Manuals
-=======
+PRoot
+=====
 
-- `PRoot <doc/proot/manual.txt>`_
-
-- `CARE <doc/care/manual.txt>`_
-
+*chroot, mount --bind, and binfmt_misc without privilege/setup for Linux*
 
 Build status
 ============
 
-- .. image:: https://travis-ci.org/cedric-vincent/PRoot.png?branch=master
-     :target: https://travis-ci.org/cedric-vincent/PRoot
+- .. image:: https://img.shields.io/gitlab/pipeline/proot/proot.svg?label=gitlab-ci&style=flat-square
+     :target: https://gitlab.com/proot/proot/pipelines
 
-- .. image:: https://coveralls.io/repos/cedric-vincent/PRoot/badge.png?branch=master
-     :target: https://coveralls.io/r/cedric-vincent/PRoot?branch=master
+- .. image:: https://img.shields.io/travis/proot-me/proot.svg?label=travis-ci&style=flat-square
+     :target: https://travis-ci.org/proot-me/proot
 
-- .. image:: https://scan.coverity.com/projects/602/badge.svg
-     :target: https://scan.coverity.com/projects/602
+- .. image:: https://img.shields.io/badge/scan--build-latest-yellow.svg?style=flat-square
+     :target: https://proot.gitlab.io/proot/reports/scan-build
+
+- .. image:: https://img.shields.io/badge/lcov-latest-6688D4.svg?style=flat-square
+     :target: https://proot.gitlab.io/proot/reports/lcov
+
+Manuals
+=======
+
+- `PRoot <https://raw.githubusercontent.com/proot-me/proot/master/doc/proot/manual.txt>`_
+
+- `CARE <https://raw.githubusercontent.com/proot-me/proot/master/doc/care/manual.txt>`_
+
+Support
+=======
+
+- `Mailing List <mailto:proot_me@googlegroups.com>`_
+- `Forum <https://groups.google.com/forum/?fromgroups#!forum/proot_me>`_
+- `Chat <https://gitter.im/proot-me/devs>`_
